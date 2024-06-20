@@ -1,0 +1,46 @@
+1. const nums = [2, 7, 11, 15];
+const target = 9;
+
+function getIndex(nums, target) {
+  const numMap = {};
+  for (let i = 0; i < nums.length; i++) {
+    const difference = target - nums[i];
+    if (numMap.hasOwnProperty(difference)) {
+      return [numMap[difference], i];
+    }
+    numMap[nums[i]] = i;
+    
+   console.log(numMap)
+  }
+  
+}
+
+console.log(getIndex(nums,target))
+
+
+2. db.sales.aggregate([
+  {
+    $group: {
+      _id: {
+        store: "$store",
+        month: { $dateToString: { format: "%Y-%m", date: "$date" } }
+      },
+      totalRevenue: { $sum: { $multiply: ["$quantity", "$price"] } },
+      totalQuantity: { $sum: "$quantity" }
+    }
+  },
+  {
+    $project: {
+      store: "$_id.store",
+      month: "$_id.month",
+      totalRevenue: 1,
+      averagePrice: { $divide: ["$totalRevenue", "$totalQuantity"] }
+    }
+  },
+  {
+    $sort: {
+      store: 1,
+      month: 1
+    }
+  }
+])
